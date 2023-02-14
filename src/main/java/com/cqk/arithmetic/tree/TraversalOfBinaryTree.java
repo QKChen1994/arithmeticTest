@@ -1,8 +1,8 @@
 package com.cqk.arithmetic.tree;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
 
 /**
  * 二叉树遍历
@@ -17,18 +17,22 @@ public class TraversalOfBinaryTree {
                         null, 8, null, 4})
         );
         TreeNode treeNode = createBinaryTree(inputList);
-        System.out.println(" 前序遍历：");
+        System.out.println(" 深度前序遍历：");
         preOrderTraversal(treeNode);
-        System.out.println(" 非递归前序遍历：");
+        System.out.println(" 非递归深度前序遍历：");
         preOrderTraversalOfStack(treeNode);
-        System.out.println(" 中序遍历：");
+        System.out.println(" 深度中序遍历：");
         inOrderTraversal(treeNode);
-        System.out.println(" 非递归中序遍历：");
+        System.out.println(" 非递归深度中序遍历：");
         inOrderTraversalOfStack(treeNode);
-        System.out.println(" 后序遍历：");
+        System.out.println(" 深度后序遍历：");
         postOrderTraversal(treeNode);
-        System.out.println(" 非递归后序遍历：");
+        System.out.println(" 非递归深度后序遍历：");
         postOrderTraversalOfStack(treeNode);
+        System.out.println(" 广度遍历：");
+        spanOrderTraversalOfStack(treeNode);
+        System.out.println(" 递归广度遍历：");
+        spanOrderTraversalOfRecursion(treeNode);
     }
 
     /**
@@ -175,6 +179,60 @@ public class TraversalOfBinaryTree {
             }
         }
     }
+
+    /**
+     * 二叉树广度遍历，用队列
+     *
+     * @param node 二叉树节点
+     */
+    private static void spanOrderTraversalOfRecursion(TreeNode node) {
+        List<List<TreeNode>> result = new ArrayList<>();
+        spanOrderTraversalOfRecursionFunction(node,1,result);
+        result.stream().forEach(depthList->{
+            depthList.stream().forEach(depthNode->{
+                System.out.println(depthNode.data);
+            });
+        });
+    }
+
+    private static void spanOrderTraversalOfRecursionFunction(TreeNode node,int depth,
+                                                              List<List<TreeNode>> result) {
+        if(depth>result.size()){
+            result.add(new ArrayList<>());
+        }
+        result.get(depth-1).add(node);
+        if(node.leftChild!=null){
+            spanOrderTraversalOfRecursionFunction(node.leftChild,depth+1,result);
+        }
+        if(node.rightChild!=null){
+            spanOrderTraversalOfRecursionFunction(node.rightChild,depth+1,result);
+        }
+    }
+
+
+    /**
+     * 二叉树广度遍历，用队列
+     *
+     * @param node 二叉树节点
+     */
+    private static void spanOrderTraversalOfStack(TreeNode node) {
+        Queue<TreeNode> queue = new LinkedBlockingQueue<>();
+        queue.add(node);
+        while (!queue.isEmpty()){
+            TreeNode treeNode = queue.remove();
+            System.out.println(treeNode.data);
+            if(treeNode.leftChild!=null){
+                queue.add(treeNode.leftChild);
+            }
+            if(treeNode.rightChild!=null){
+                queue.add(treeNode.rightChild);
+            }
+        }
+    }
+
+
+
+
 
     /**
      * 6 * 二叉树节点
