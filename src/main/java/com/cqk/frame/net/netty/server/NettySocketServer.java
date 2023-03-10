@@ -3,6 +3,7 @@ package com.cqk.frame.net.netty.server;
 import com.cqk.frame.net.netty.server.handler.WebSocketHandler;
 import com.cqk.frame.net.netty.server.handler.WebSocketHandler2;
 import com.sun.net.httpserver.HttpServer;
+import io.grpc.Grpc;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -74,27 +75,27 @@ public class NettySocketServer {
                             pipeline.addLast(new IdleStateHandler(0,0,6));
                             pipeline.addLast(new WebSocketHandler());
 
-
+/*
                             ChannelPipeline pipeline2 = ch.pipeline();
                             //因为基于http协议，使用http编码和解码器
                             pipeline2.addLast(new HttpServerCodec());
                             // 以块的方式写，添加chunkedWriteHandler
                             pipeline2.addLast(new ChunkedWriteHandler());
-                            /**
+                            *//**
                              * http数据在传输过程中是分段的，httpObjectAggregator就是将多个段聚合
                              * 这就是为什么，当浏览器发送大量请求时，会发出多次http请求
-                             */
+                             *//*
                             pipeline2.addLast(new HttpObjectAggregator(8192));
-                            /**
+                            *//**
                              * 对于websocket他的数据是以帧frame的形式传递的
                              * 可以看到websocketFrame下面有六个子类
                              * 浏览器请求时，ws://localhost:7000/hello表示请求的uri
                              * webSocketServerProtocolHandler核心功能是将http协议升级未ws，保持长连接
                              * 是通过一个状态码101
-                             */
+                             *//*
                             pipeline2.addLast(new WebSocketServerProtocolHandler("/web2","v1,v2"));
                             pipeline2.addLast(new IdleStateHandler(0,0,6));
-                            pipeline2.addLast(new WebSocketHandler2());
+                            pipeline2.addLast(new WebSocketHandler2());*/
                         }
                     });
             ChannelFuture future = bootstrap.bind(7000).sync();

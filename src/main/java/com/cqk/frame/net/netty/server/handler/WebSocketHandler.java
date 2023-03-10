@@ -36,13 +36,38 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         //id表示唯一的值，longtext是唯一的，shortText不是唯一的
         System.out.println("handlerAdded 被调用"+ctx.channel().id().asLongText());
-        System.out.println("handlerAdded 被调用"+ctx.channel().id().asShortText());
     }
 
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel注册："+ctx.channel().id().asLongText());
+        super.channelRegistered(ctx);
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel活动："+ctx.channel().id().asLongText());
+        super.channelActive(ctx);
+    }
+
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel不活动："+ctx.channel().id().asLongText());
+        super.channelInactive(ctx);
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel断开注册："+ctx.channel().id().asLongText());
+        super.channelUnregistered(ctx);
+    }
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         System.out.println("handlerRemoved 被调用"+ctx.channel().id().asLongText());
     }
+
+
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
@@ -66,6 +91,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                 }else{
                     System.out.println("关闭不活动的链接");
                     ctx.channel().close();
+
                 }
             }
         }

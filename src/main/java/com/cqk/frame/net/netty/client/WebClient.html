@@ -11,7 +11,7 @@
     // 判断当前浏览器是否支持webSocket
     if(window.WebSocket){
         // go on
-        socket = new WebSocket("ws://localhost:7000/web2","v2");
+        socket = new WebSocket("ws://localhost:8182/ws/web","v2");
         // 相当于channelRead0，ev 可以收到服务器端会送的消息
         socket.onmessage = function (ev) {
             var rt = document.getElementById("responseText");
