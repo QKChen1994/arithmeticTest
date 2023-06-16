@@ -10,7 +10,10 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.AsciiString;
 
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -53,6 +56,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("channel不活动："+ctx.channel().isWritable());
         System.out.println("channel不活动："+ctx.channel().id().asLongText());
         super.channelInactive(ctx);
     }
@@ -83,15 +87,17 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.ALL_IDLE) {
-                System.err.println("客户端心跳包检测超时");
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String time = sdf.format(new Date());
+                System.err.println("客户端心跳包检测超时，time:"+time);
                 String channelId = ctx.channel().id().toString();
                 int overtimeTimes = clientOvertimeMap.getOrDefault(channelId, 0);
                 if(overtimeTimes < MAX_OVERTIME){
                     addUserOvertime(channelId);
                 }else{
                     System.out.println("关闭不活动的链接");
+                    System.out.println("关闭channel前状态："+ctx.channel().isWritable());
                     ctx.channel().close();
-
                 }
             }
         }
